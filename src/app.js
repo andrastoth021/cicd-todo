@@ -9,24 +9,11 @@ export function createApp(todoStore, args) {
   switch (command) {
     case "update-title":
       const validatedParams = validateRenameParams(params)//TODO: outsource it to validate.js
-      const [id,title] = validatedParams;
-      let foundIndex = null;
-      const [foundTODO] = list(todoStore).filter((item,index)=>{
-        if(item.id==id){
-          foundIndex = index;
-          return true;
-        } 
-      });
-  
-      if(!foundTODO){
+      const changedTodo = rename(todoStore,validatedParams);
+      if(!changedTodo){
         throw new AppError('The todo with the given ID is not found!')
-      } else {
-        foundTODO.title = title;
-        console.log(foundTODO);
-        rename(todoStore,foundTODO,foundIndex)
-        display(['Title of todo is changed:', format(foundTODO)])
       }
-
+      display(['Title of todo is changed:', format(changedTodo)])
       break;
     
     case 'list':
