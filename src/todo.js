@@ -22,6 +22,7 @@ export function list(store) {
 export function add(store, params) {
   const [title] = params;
   const todos = store.get()
+  console.log(todos);
   const newTodo = {
     title,
     done: false,
@@ -30,4 +31,10 @@ export function add(store, params) {
   const toStore = [...todos, newTodo]
   store.set(toStore)
   return newTodo;
+}
+
+export function rename(store, newTodo, index) {
+  const todos = store.get()
+  todos.splice(index,1,newTodo);
+  store.set(todos)
 }
