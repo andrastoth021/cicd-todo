@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { add, format, formatList, list } from './todo.js';
-import { findById } from './todo.js'; 
+import { findById,rename } from './todo.js'; 
 
 
 
@@ -167,4 +167,29 @@ describe('findById', () => {
   
 });
 
+describe('rename', () => {
+  it('should change the title of a todo of a given ID, if it exists', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+    ])
+    rename(mockStore, ['1', 'Changed title']);
+    const expected = [
+      { id: 1, title: 'Changed title', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+      ];
+    const current = list(mockStore);
+    expect(current).toStrictEqual(expected);
+  });
+  
+  it('should return the changed todo to show it to the user', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+    ])
+    const current = rename(mockStore, ['1', 'Changed title']);
+    const expected = { id: 1, title: 'Changed title', done: false };
+    expect(current).toStrictEqual(expected);
+  });
+});
 
