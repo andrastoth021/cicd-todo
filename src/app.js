@@ -19,6 +19,11 @@ export function createApp(todoStore, args) {
       const added = add(todoStore, validated);
       display(['New Todo added:', format(added)])
       break;
+    case 'find-by-id':
+      const [idParam] = params;
+      const todo = findById(todoStore, idParam);
+      display([format(todo)]);
+      break;
     default:
       throw new AppError(`Unknown command: ${command}`)
   }

@@ -1,5 +1,8 @@
 import { jest } from '@jest/globals';
 import { add, format, formatList, list } from './todo.js';
+import { findById } from './todo.js'; 
+
+
 
 function createMockStore(data) {
   return {
@@ -136,5 +139,32 @@ describe('add', () => {
 });
 
 
+describe('findById', () => {
+  it('should return the correct todo when the ID exists', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+    ]);
+
+    const current = findById(mockStore, '1');
+
+    expect(current).toStrictEqual({ id: 1, title: 'Todo 1', done: false });
+  });
+
+  it('should throw an AppError if the ID is not numeric', () => {
+    const mockStore = createMockStore([]);
+  
+    expect(() => findById(mockStore, 'abc'))
+      .toThrow(Error)
+  });
+  
+  it('should throw an AppError if the ID does not exist', () => {
+    const mockStore = createMockStore([{ id: 1, title: 'Todo 1', done: false }]);
+  
+    expect(() => findById(mockStore, '3'))
+      .toThrow(Error);
+  });
+  
+});
 
 
