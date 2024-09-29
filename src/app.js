@@ -1,7 +1,9 @@
 import { list, formatList, format, add, rename } from './todo.js';
 import { display } from './display.js';
 import { AppError } from './app-error.js';
-import { validateAddParams, validateRenameParams } from './validate.js';
+import { validateAddParams} from './validate.js';
+
+import validateRenameParams from './validate/validateRenameParams.js' 
 
 export function createApp(todoStore, args) {
   const [, , command, ...params] = args;
