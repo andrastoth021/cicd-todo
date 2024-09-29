@@ -1,4 +1,4 @@
-import { list, formatList, format, add } from './todo.js';
+import { list, formatList, format, add, findById } from './todo.js';
 import { display } from './display.js';
 import { AppError } from './app-error.js';
 import { validateAddParams } from './validate.js';
