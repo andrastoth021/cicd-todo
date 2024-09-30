@@ -106,3 +106,16 @@ export function rename(todoStore,params) {
   }
   return foundTODO;
 }
+
+export function findByStatus(store, status) {
+  const todos = store.get();
+  
+  const isDone = status === "done";
+  const filteredTodos = todos.filter(todo => todo.done === isDone);
+
+  if (filteredTodos.length === 0) {
+    throw new AppError(`No todos found with status: ${status}`);
+  }
+
+  return filteredTodos;
+}

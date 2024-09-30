@@ -1,4 +1,4 @@
-import { validateAddParams, validateFindByidParams, validateRenameParams, validateCompleteParams, validateDeleteParams } from './validate.js';
+import { validateAddParams, validateFindByidParams, validateRenameParams, validateCompleteParams, validateFindByStatusParams, validateDeleteParams } from './validate.js';
 
 describe('validateAddParams', () => {
   it('should pass and return with the original params with single string', () => {
@@ -180,3 +180,33 @@ describe('validateFindByidParams', () => {
 
 })
 
+describe('validateFindByStatusParams', () => {
+  it('should return the status if it is "done" or "not-done"', () => {
+    const validDoneParams = ['done'];
+    const validNotDoneParams = ['not-done'];
+
+    expect(validateFindByStatusParams(validDoneParams)).toBe('done');
+    expect(validateFindByStatusParams(validNotDoneParams)).toBe('not-done');
+  });
+
+  it('should throw an error if the status is invalid', () => {
+    const invalidParams = ['in-progress'];
+    const numberParams = [2];
+    const invalidNotDone = ['not done']
+
+    expect(() => validateFindByStatusParams(invalidParams))
+      .toThrow("Invalid status! Please provide 'done' or 'not-done'.");
+
+    expect(() => validateFindByStatusParams(numberParams))
+    .toThrow("Invalid status! Please provide 'done' or 'not-done'.");
+
+    expect(() => validateFindByStatusParams(invalidNotDone))
+    .toThrow("Invalid status! Please provide 'done' or 'not-done'.");
+  });
+
+  it('should throw an error if no status is provided', () => {
+    const noParams = [];
+    expect(() => validateFindByStatusParams(noParams))
+      .toThrow("Invalid status! Please provide 'done' or 'not-done'.");
+  });
+});
