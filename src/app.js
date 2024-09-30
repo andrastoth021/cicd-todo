@@ -1,7 +1,7 @@
-import { list, formatList, format, add, findById, rename, complete, findByStatus, remove } from "./todo.js";
+import { list, formatList, format, add, findById, rename, complete, findByStatus, remove, findByTitle } from "./todo.js";
 import { display } from "./display.js";
 import { AppError } from "./app-error.js";
-import { validateAddParams,validateRenameParams, validateFindByidParams, validateCompleteParams, validateFindByStatusParams, validateDeleteParams} from "./validate.js";
+import { validateAddParams,validateRenameParams, validateFindByidParams, validateCompleteParams, validateFindByStatusParams, validateDeleteParams,validateTitleSearchParams} from "./validate.js";
 
 
 export function createApp(todoStore, args) {
@@ -44,6 +44,12 @@ export function createApp(todoStore, args) {
           const deleted = remove(todoStore, validId);
           display(["Todo removed:", format(deleted)]);
           break;
+    case "find-by-title":
+        const validatedTitleSearchParams = validateTitleSearchParams(params);
+        const foundTodos = findByTitle(todoStore, validatedTitleSearchParams);
+        if(foundTodos.length){display([...formatList(foundTodos)]);}
+        else {display([`There are no todos with similar title.`])}
+    break;
     default:
       throw new AppError(`Unknown command: ${command}`);
   }

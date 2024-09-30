@@ -84,3 +84,12 @@ export function validateFindByStatusParams(params) {
       throw new AppError("Invalid status! Please provide 'done' or 'not-done'.");
   }
 }
+
+export function validateTitleSearchParams(params) {
+  const [title] = params;
+    if(title.length<3) 
+      {
+        throw new AppError('The searched text should be at least 3 character long!')
+      };
+  return params;
+}

@@ -119,3 +119,12 @@ export function findByStatus(store, status) {
 
   return filteredTodos;
 }
+
+export function findByTitle(store, params) { 
+  const [title] = params;
+  const regexp = new RegExp(title,'i')
+  const foundToDos = list(store).filter(item=>
+        regexp.test(item.title)
+      );
+  return foundToDos;
+}

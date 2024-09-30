@@ -1,4 +1,4 @@
-import { validateAddParams, validateFindByidParams, validateRenameParams, validateCompleteParams, validateFindByStatusParams, validateDeleteParams } from './validate.js';
+import { validateAddParams, validateFindByidParams, validateRenameParams, validateCompleteParams, validateFindByStatusParams, validateDeleteParams, validateTitleSearchParams } from './validate.js';
 
 describe('validateAddParams', () => {
   it('should pass and return with the original params with single string', () => {
@@ -209,4 +209,14 @@ describe('validateFindByStatusParams', () => {
     expect(() => validateFindByStatusParams(noParams))
       .toThrow("Invalid status! Please provide 'done' or 'not-done'.");
   });
+});
+
+describe('validateTitleSearchParams', () => {
+
+  it('should throw when the param length is a less than 3 charakter long string', () => {
+    const params = ['as'];
+    
+    expect(() => validateTitleSearchParams(params))
+    .toThrow('The searched text should be at least 3 character long!');
+  })
 });

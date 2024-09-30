@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { add, complete, format, formatList, list, findById, rename, findByStatus, remove } from './todo.js';
+import { add, complete, format, formatList, list, findById, rename, findByStatus, remove, findByTitle } from './todo.js';
 
 
 function createMockStore(data) {
@@ -311,4 +311,20 @@ describe('findByStatus', () => {
     expect(() => findByStatus(mockStore, 'done'))
       .toThrow("No todos found with status: done");
   });
+});
+
+describe('findByTitle', () => {
+  it('should find the titles that contains the given text', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo abc', done: false },
+      { id: 2, title: 'Todo def', done: true }
+    ])
+    
+    const expected = [
+      { id: 2, title: 'Todo def', done: true }
+      ];
+    const current = findByTitle(mockStore, ['def']);
+    expect(current).toStrictEqual(expected);
+  });
+  
 });
