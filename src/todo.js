@@ -35,8 +35,7 @@ export function add(store, params) {
 }
 
 export function complete(store, params) {
-  const [id] = params;
-  if (isNaN(id)) throw new AppError("ID is not a number!");
+  const id = parseInt(params);
 
   const todos = store.get();
   for (let i = 0; i < todos.length; i++) {
@@ -52,5 +51,5 @@ export function complete(store, params) {
     }
   }
 
-  throw new AppError(`Todo doesn't exist with the provided ID: ${id}`);
+  throw new AppError('Todo does not exist with the provided ID!');
 }
