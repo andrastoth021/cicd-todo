@@ -128,3 +128,21 @@ export function findByTitle(store, params) {
       );
   return foundToDos;
 }
+
+// function to refactor todo.js
+function changeTodoWithId(store,id,callbackFn){
+  
+  const todos = store.get();
+  let searchedTodo; 
+
+  for (let i = 0; i < todos.length; i++) {
+    const todo = todos[i];
+    if (todo.id === id) {
+      callbackFn()
+      searchedTodo = todo;
+      return;
+    }
+  }
+
+  return searchedTodo;
+}
