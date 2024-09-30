@@ -90,21 +90,15 @@ export function findById(store, idParam) {
 
 export function rename(todoStore,params) {
   const [id,title] = params;
-  let foundIndex = null;
-  const [foundTODO] = list(todoStore).filter((item,index)=>{
-        if(item.id==id){
-          foundIndex = index;
-          return true;
-        } 
-      });
+  const {searchedTodo,indexOfTodo} = changeTodoWithId(todoStore,id)
   
-  if(foundTODO){    
-    foundTODO.title = title;
+  if(searchedTodo){    
+    searchedTodo.title = title;
     const todos = todoStore.get()
-    todos.splice(foundIndex,1,foundTODO);
+    todos.splice(indexOfTodo,1,searchedTodo);
     todoStore.set(todos)
   }
-  return foundTODO;
+  return searchedTodo;
 }
 
 export function findByStatus(store, status) {
@@ -130,19 +124,19 @@ export function findByTitle(store, params) {
 }
 
 // function to refactor todo.js
-function changeTodoWithId(store,id,callbackFn){
-  
+function changeTodoWithId(store,id,callbackFn=()=>{}){
   const todos = store.get();
-  let searchedTodo; 
+  let searchedTodo = null;
+  let indexOfTodo;
 
   for (let i = 0; i < todos.length; i++) {
     const todo = todos[i];
     if (todo.id === id) {
       callbackFn()
       searchedTodo = todo;
-      return;
+      indexOfTodo = i;
     }
   }
-
-  return searchedTodo;
+  console.log("searchedTodo,indexOfTodo:", searchedTodo,indexOfTodo)
+  return {searchedTodo,indexOfTodo};
 }
