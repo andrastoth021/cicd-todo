@@ -155,14 +155,14 @@ describe('findById', () => {
     const mockStore = createMockStore([]);
   
     expect(() => findById(mockStore, 'abc'))
-      .toThrow(Error)
+      .toThrow('The ID must be a numeric value.')
   });
   
   it('should throw an AppError if the ID does not exist', () => {
     const mockStore = createMockStore([{ id: 1, title: 'Todo 1', done: false }]);
   
     expect(() => findById(mockStore, '3'))
-      .toThrow(Error);
+      .toThrow('Todo with ID 3 not found.');
   });
   
 });
