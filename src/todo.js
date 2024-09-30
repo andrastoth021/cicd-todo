@@ -1,5 +1,6 @@
 import { AppError } from './app-error.js';
 
+
 export function format(todo) {
   return `${todo.id} - [${todo.done ? 'x': ' '}] ${todo.title}`;
 }
@@ -52,4 +53,39 @@ export function complete(store, params) {
   }
 
   throw new AppError('Todo does not exist with the provided ID!');
+}
+
+export function findById(store, idParam) {
+
+  const id = Number(idParam);
+
+  const todos = store.get();
+
+  for(const todo of todos){
+    if(todo.id === id){
+      return todo;
+    }
+  }
+
+  throw new AppError(`There is no todo with id: ${id}`);
+  
+}
+
+export function rename(todoStore,params) {
+  const [id,title] = params;
+  let foundIndex = null;
+  const [foundTODO] = list(todoStore).filter((item,index)=>{
+        if(item.id==id){
+          foundIndex = index;
+          return true;
+        } 
+      });
+  
+  if(foundTODO){    
+    foundTODO.title = title;
+    const todos = todoStore.get()
+    todos.splice(foundIndex,1,foundTODO);
+    todoStore.set(todos)
+  }
+  return foundTODO;
 }

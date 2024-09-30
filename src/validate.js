@@ -11,6 +11,7 @@ export function validateAddParams(params) {
   return params;
 }
 
+
 export function validateCompleteParams(params) {
   if (params.length !== 1)
     throw new AppError('Give an ID as the only parameter in parenthesis.');
@@ -21,3 +22,40 @@ export function validateCompleteParams(params) {
   
   return params;
 }
+
+export function validateRenameParams(params) {
+  //It has two params, an ID and the new title as a string.
+  const [id,title] = params;
+  /* The ID should be numeric and 
+  a string should be at least 1 character long or 
+  a meaningful error should be shown to the user.
+  */
+  if(
+    isNaN(+id)||
+    typeof(title)!="string"||
+    title.length<1
+    ){
+    throw new AppError('The ID should be numeric and the title should be at least 1 character long!')
+  }
+  return params;
+}
+
+export function validateFindByidParams(params) {
+
+  if (params.length !== 1) {
+    throw new AppError("Please give a single numeric value as id. --> e.g.: node index.js find-by-id 1")
+  }
+  
+  const [paramsId] = params;
+  const id = parseInt(paramsId);
+
+  if(isNaN(id)){
+    throw new AppError("The id should be numeric!");
+  }
+
+  if (id <= 0) {
+    throw new AppError("The id should be bigger than 0!");
+  }
+
+}
+

@@ -1,5 +1,6 @@
 import { jest } from '@jest/globals';
-import { add, complete, format, formatList, list } from './todo.js';
+import { add, complete, format, formatList, list, findById, rename } from './todo.js';
+
 
 function createMockStore(data) {
   return {
@@ -168,7 +169,7 @@ describe('complete', () => {
 
     expect(() => complete(mockStore, params))
       .toThrow('This Todo is already completed!');
-  })
+  });
 
   it('should throw an AppError if the ID is not found', () => {
     const params = 3;
@@ -180,6 +181,56 @@ describe('complete', () => {
 
     expect(() => complete(mockStore, params))
       .toThrow('Todo does not exist with the provided ID!');
-  })
+  });
+  
+});
+
+describe('findById', () => {
+  it('should return the correct todo when the ID exists', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+    ]);
+
+    const current = findById(mockStore, 1);
+
+    expect(current).toStrictEqual({ id: 1, title: 'Todo 1', done: false });
+  });
+  it('should throw an AppError if the ID does not exist', () => {
+    const mockStore = createMockStore([{ id: 1, title: 'Todo 1', done: false }]);
+
+    const testId = 3;
+  
+    expect(() => findById(mockStore, testId))
+      .toThrow(`There is no todo with id: ${testId}`);
+  });
+  
+});
+
+describe('rename', () => {
+  it('should change the title of a todo of a given ID, if it exists', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+    ])
+    rename(mockStore, ['1', 'Changed title']);
+    const expected = [
+      { id: 1, title: 'Changed title', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+      ];
+    const current = list(mockStore);
+    expect(current).toStrictEqual(expected);
+  });
+  
+  it('should return the changed todo to show it to the user', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+    ])
+    const current = rename(mockStore, ['1', 'Changed title']);
+    const expected = { id: 1, title: 'Changed title', done: false };
+    expect(current).toStrictEqual(expected);
+  });
+
 });
 
