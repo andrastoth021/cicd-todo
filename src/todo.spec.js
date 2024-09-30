@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { add, complete, format, formatList, list, findById, rename } from './todo.js';
+import { add, complete, format, formatList, list, findById, rename, findByStatus } from './todo.js';
 
 
 function createMockStore(data) {
@@ -234,3 +234,35 @@ describe('rename', () => {
 
 });
 
+describe('findByStatus', () => {
+  it('should return todos with done status', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+    ]);
+
+    const current = findByStatus(mockStore, 'done');
+
+    expect(current).toStrictEqual([{ id: 2, title: 'Todo 2', done: true }]);
+  });
+
+  it('should return todos with not-done status', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false },
+      { id: 2, title: 'Todo 2', done: true }
+    ]);
+
+    const current = findByStatus(mockStore, 'not-done');
+
+    expect(current).toStrictEqual([{ id: 1, title: 'Todo 1', done: false }]);
+  });
+
+  it('should throw an error if no todos match the status', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false }
+    ]);
+
+    expect(() => findByStatus(mockStore, 'done'))
+      .toThrow("No todos found with status: done");
+  });
+});
