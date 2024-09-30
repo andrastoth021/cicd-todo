@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { add, format, formatList, list } from './todo.js';
-import { findById,rename } from './todo.js'; 
+import { findById,rename,findByTitle } from './todo.js'; 
 
 
 
@@ -193,3 +193,22 @@ describe('rename', () => {
   });
 });
 
+///
+////
+////
+///
+describe('findByTitle', () => {
+  it('should find the titles that contains the given text', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo abc', done: false },
+      { id: 2, title: 'Todo def', done: true }
+    ])
+    
+    const expected = [
+      { id: 2, title: 'Todo def', done: true }
+      ];
+    const current = findByTitle(mockStore, ['def']);
+    expect(current).toStrictEqual(expected);
+  });
+  
+});

@@ -1,4 +1,4 @@
-import { validateAddParams,validateRenameParams } from "./validate";
+import { validateAddParams,validateRenameParams,validateTitleSearchParams } from "./validate";
 
 describe('validateAddParams', () => {
   it('should pass and return with the original params with single string', () => {
@@ -89,4 +89,17 @@ describe('validateRenameParams', () => {
     .toThrow('The ID should be numeric and the title should be at least 1 character long!');
   })
 
+})
+///
+//
+///
+//
+describe('validateTitleSearchParams', () => {
+
+  it('should throw when the param length is a less than 3 charakter long string', () => {
+    const params = ['as'];
+    
+    expect(() => validateTitleSearchParams(params))
+    .toThrow('The searched text should be at least 3 character long!');
+  })
 })
