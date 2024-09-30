@@ -27,3 +27,22 @@ export function validateRenameParams(params) {
   }
   return params;
 }
+
+export function validateFindByidParams(params) {
+
+  if (params.length !== 1) {
+    throw new AppError("Please give a single numeric value as id. --> e.g.: node index.js find-by-id 1")
+  }
+  
+  const [paramsId] = params;
+  const id = parseInt(paramsId);
+
+  if(isNaN(id)){
+    throw new AppError("The id should be numeric!");
+  }
+
+  if (id <= 0) {
+    throw new AppError("The id should be bigger than 0!");
+  }
+
+}

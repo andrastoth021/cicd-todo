@@ -17,8 +17,8 @@ export function createApp(todoStore, args) {
       display(["New Todo added:", format(added)]);
       break;
     case "find-by-id":
-      const [idParam] = params;
-      const todo = findById(todoStore, idParam);
+      const validatedParam = validatedParams(params);
+      const todo = findById(todoStore, validatedParam);
       display([format(todo)]);
       break;
     case "update-title":

@@ -146,23 +146,17 @@ describe('findById', () => {
       { id: 2, title: 'Todo 2', done: true }
     ]);
 
-    const current = findById(mockStore, '1');
+    const current = findById(mockStore, 1);
 
     expect(current).toStrictEqual({ id: 1, title: 'Todo 1', done: false });
   });
-
-  it('should throw an AppError if the ID is not numeric', () => {
-    const mockStore = createMockStore([]);
-  
-    expect(() => findById(mockStore, 'abc'))
-      .toThrow('The ID must be a numeric value.')
-  });
-  
   it('should throw an AppError if the ID does not exist', () => {
     const mockStore = createMockStore([{ id: 1, title: 'Todo 1', done: false }]);
+
+    const testId = 3;
   
-    expect(() => findById(mockStore, '3'))
-      .toThrow('Todo with ID 3 not found.');
+    expect(() => findById(mockStore, testId))
+      .toThrow(`There is no todo with id: ${testId}`);
   });
   
 });
