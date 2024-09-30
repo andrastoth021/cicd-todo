@@ -22,8 +22,8 @@ export function createApp(todoStore, args) {
     case 'complete':
       const validatedId = validateCompleteParams(params);
       const completed = complete(todoStore, validatedId);
-      if (completed) display(['Todo with the following ID is completed: ' + validatedId]);
-      else display(['Todo with the following ID was changed to NOT being completed: ' + validatedId]);
+      display(['Todo with the following ID is completed: ' + validatedId]);
+      display([format(completed)]);
       break;
     default:
       throw new AppError(`Unknown command: ${command}`)

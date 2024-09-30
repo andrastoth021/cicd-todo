@@ -42,10 +42,13 @@ export function complete(store, params) {
   for (let i = 0; i < todos.length; i++) {
     const todo = todos[i];
     if (todo.id == id) {
-      todo.done = !todo.done;
-      const toStore = [...todos];
-      store.set(toStore);
-      return todo.done;
+      if (todo.done === true) throw new AppError("This Todo is already completed!");
+      else {
+        todo.done = true;
+        const toStore = [...todos];
+        store.set(toStore);
+        return todo;
+      }
     }
   }
 
