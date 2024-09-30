@@ -1,7 +1,8 @@
-import { list, formatList, format, add, findById, rename } from "./todo.js";
+import { list, formatList, format, add, findById, rename, complete } from "./todo.js";
 import { display } from "./display.js";
 import { AppError } from "./app-error.js";
-import { validateAddParams,validateRenameParams } from "./validate.js";
+import { validateAddParams,validateRenameParams, validateFindByidParams, validateCompleteParams } from "./validate.js";
+
 
 export function createApp(todoStore, args) {
   const [, , command, ...params] = args;
@@ -17,7 +18,7 @@ export function createApp(todoStore, args) {
       display(["New Todo added:", format(added)]);
       break;
     case "find-by-id":
-      const validatedParam = validatedParams(params);
+      const validatedParam = validateFindByidParams(params);
       const todo = findById(todoStore, validatedParam);
       display([format(todo)]);
       break;
@@ -26,6 +27,12 @@ export function createApp(todoStore, args) {
       const changedTodo = rename(todoStore, validatedParams);
       if (!changedTodo) {throw new AppError("The todo with the given ID is not found!");}
       display(["Title of todo is changed:", format(changedTodo)]);
+      break;
+    case 'complete':
+      const validatedId = validateCompleteParams(params);
+      const completed = complete(todoStore, validatedId);
+      display(['Todo with the following ID is completed: ' + validatedId]);
+      display([format(completed)]);
       break;
     default:
       throw new AppError(`Unknown command: ${command}`);

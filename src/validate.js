@@ -11,6 +11,18 @@ export function validateAddParams(params) {
   return params;
 }
 
+
+export function validateCompleteParams(params) {
+  if (params.length !== 1)
+    throw new AppError('Give an ID as the only parameter in parenthesis.');
+  
+  const [id] = params;
+  if (typeof id !== 'number' || isNaN(id) || id < 0)
+    throw new AppError('The ID must be a number which is bigger than zero.');
+  
+  return params;
+}
+
 export function validateRenameParams(params) {
   //It has two params, an ID and the new title as a string.
   const [id,title] = params;
@@ -46,3 +58,4 @@ export function validateFindByidParams(params) {
   }
 
 }
+

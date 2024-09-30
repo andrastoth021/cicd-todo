@@ -1,4 +1,5 @@
-import { AppError } from "./app-error.js";
+import { AppError } from './app-error.js';
+
 
 export function format(todo) {
   return `${todo.id} - [${todo.done ? 'x': ' '}] ${todo.title}`;
@@ -32,6 +33,26 @@ export function add(store, params) {
   const toStore = [...todos, newTodo]
   store.set(toStore)
   return newTodo;
+}
+
+export function complete(store, params) {
+  const id = parseInt(params);
+
+  const todos = store.get();
+  for (let i = 0; i < todos.length; i++) {
+    const todo = todos[i];
+    if (todo.id == id) {
+      if (todo.done === true) throw new AppError("This Todo is already completed!");
+      else {
+        todo.done = true;
+        const toStore = [...todos];
+        store.set(toStore);
+        return todo;
+      }
+    }
+  }
+
+  throw new AppError('Todo does not exist with the provided ID!');
 }
 
 export function findById(store, idParam) {
