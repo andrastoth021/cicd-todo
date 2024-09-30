@@ -1,3 +1,5 @@
+import { AppError } from './app-error.js';
+
 export function format(todo) {
   return `${todo.id} - [${todo.done ? 'x': ' '}] ${todo.title}`;
 }
@@ -30,4 +32,22 @@ export function add(store, params) {
   const toStore = [...todos, newTodo]
   store.set(toStore)
   return newTodo;
+}
+
+export function complete(store, params) {
+  const [id] = params;
+  if (isNaN(id)) throw new AppError("ID is not a number!");
+
+  const todos = store.get();
+  for (let i = 0; i < todos.length; i++) {
+    const todo = todos[i];
+    if (todo.id == id) {
+      todo.done = !todo.done;
+      const toStore = [...todos];
+      store.set(toStore);
+      return todo.done;
+    }
+  }
+
+  throw new AppError(`Todo doesn't exist with the provided ID: ${id}`);
 }

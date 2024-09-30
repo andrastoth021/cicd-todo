@@ -1,4 +1,4 @@
-import { list, formatList, format, add } from './todo.js';
+import { list, formatList, format, add, complete } from './todo.js';
 import { display } from './display.js';
 import { AppError } from './app-error.js';
 import { validateAddParams, validateCompleteParams } from './validate.js';
@@ -21,8 +21,9 @@ export function createApp(todoStore, args) {
       break;
     case 'complete':
       const validatedId = validateCompleteParams(params);
-      // const completed = complete(validatedId);
-      display(['Todo with the following ID is completed: ' + validatedId]);
+      const completed = complete(todoStore, validatedId);
+      if (completed) display(['Todo with the following ID is completed: ' + validatedId]);
+      else display(['Todo with the following ID was changed to NOT being completed: ' + validatedId]);
       break;
     default:
       throw new AppError(`Unknown command: ${command}`)
