@@ -35,20 +35,19 @@ export function add(store, params) {
 }
 
 export function findById(store, idParam) {
+
   const id = Number(idParam);
-  
-  if (isNaN(id)) {
-    throw new AppError('The ID must be a numeric value.');
-  }
 
   const todos = store.get();
-  const todo = todos.find(todo => todo.id === id);
 
-  if (!todo) {
-    throw new AppError(`Todo with ID ${id} not found.`);
+  for(const todo of todos){
+    if(todo.id === id){
+      return todo;
+    }
   }
 
-  return todo;
+  throw new AppError(`There is no todo with id: ${id}`);
+  
 }
 
 export function rename(todoStore,params) {
