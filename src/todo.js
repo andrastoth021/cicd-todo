@@ -55,6 +55,23 @@ export function complete(store, params) {
   throw new AppError('Todo does not exist with the provided ID!');
 }
 
+export function remove(store, params) {
+  const id = parseInt(params);
+  const todos = store.get();
+
+  for (let i = 0; i < todos.length; i++) {
+    const todo = todos[i];
+    if (todo.id === id) {
+      todos.splice(i, 1);
+      const toStore = [...todos];
+      store.set(toStore)
+      return todo;
+    }
+  }
+
+  throw new AppError('Todo does not exist with the provided ID!');
+}
+
 export function findById(store, idParam) {
 
   const id = Number(idParam);

@@ -1,4 +1,4 @@
-import { validateAddParams, validateFindByidParams, validateRenameParams, validateCompleteParams, validateFindByStatusParams } from './validate.js';
+import { validateAddParams, validateFindByidParams, validateRenameParams, validateCompleteParams, validateFindByStatusParams, validateDeleteParams } from './validate.js';
 
 describe('validateAddParams', () => {
   it('should pass and return with the original params with single string', () => {
@@ -71,15 +71,44 @@ describe('validateCompleteParams', () => {
       .toThrow('The ID must be a number which is bigger than zero.');
   })
   
-  
   it('should throw if the provided ID is not numeric', () => {
     const params = ["String"];
     
     expect(() => validateCompleteParams(params))
       .toThrow('The ID must be a number which is bigger than zero.');
   })
-
 })
+
+describe('validateDeleteParams', () => {
+  it('should throw when multiple params given', () => {
+    const params = ['1', '15'];
+    
+    expect(() => validateDeleteParams(params))
+      .toThrow('Give an ID as the only parameter in parenthesis.');
+  })
+
+  it('should throw when no params given.', () => {
+    const params = [];
+    
+    expect(() => validateDeleteParams(params))
+      .toThrow('Give an ID as the only parameter in parenthesis.');
+  })
+
+  it('should throw when the param is not a bigger than zero', () => {
+    const params = [-1];
+    
+    expect(() => validateDeleteParams(params))
+      .toThrow('The ID must be a number which is bigger than zero.');
+  })
+  
+  it('should throw if the provided ID is not numeric', () => {
+    const params = ["String"];
+    
+    expect(() => validateDeleteParams(params))
+      .toThrow('The ID must be a number which is bigger than zero.');
+  })
+})
+
 
 describe('validateRenameParams', () => {
   

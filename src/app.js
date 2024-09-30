@@ -1,7 +1,7 @@
-import { list, formatList, format, add, findById, rename, complete, findByStatus } from "./todo.js";
+import { list, formatList, format, add, findById, rename, complete, findByStatus, remove } from "./todo.js";
 import { display } from "./display.js";
 import { AppError } from "./app-error.js";
-import { validateAddParams,validateRenameParams, validateFindByidParams, validateCompleteParams, validateFindByStatusParams } from "./validate.js";
+import { validateAddParams,validateRenameParams, validateFindByidParams, validateCompleteParams, validateFindByStatusParams, validateDeleteParams} from "./validate.js";
 
 
 export function createApp(todoStore, args) {
@@ -39,6 +39,11 @@ export function createApp(todoStore, args) {
         const filteredTodos = findByStatus(todoStore, status);
         display(formatList(filteredTodos));
         break;
+    case 'delete':
+          const validId = validateDeleteParams(params);
+          const deleted = remove(todoStore, validId);
+          display(["Todo removed:", format(deleted)]);
+          break;
     default:
       throw new AppError(`Unknown command: ${command}`);
   }

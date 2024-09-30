@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { add, complete, format, formatList, list, findById, rename, findByStatus } from './todo.js';
+import { add, complete, format, formatList, list, findById, rename, findByStatus, remove } from './todo.js';
 
 
 function createMockStore(data) {
@@ -180,6 +180,52 @@ describe('complete', () => {
     }]);
 
     expect(() => complete(mockStore, params))
+      .toThrow('Todo does not exist with the provided ID!');
+  });
+  
+});
+
+describe('delete', () => {
+  it('should delete the preferred todo', () => {
+    const params = 1;
+    const mockStore = createMockStore([{
+      id: 1,
+      done: false,
+      title: 'Old Todo'
+    },
+    {
+      id: 2,
+      done: true,
+      title: 'New Todo'
+    }]);
+    
+    const expectedToRemove = {
+      id: 1,
+      done: false,
+      title: 'Old Todo'
+    };
+    const expectedToBeInMockStore = {
+      id: 2,
+      done: true,
+      title: 'New Todo'
+    };
+    
+    const current = remove(mockStore, params);
+
+    expect(current).toStrictEqual(expectedToRemove);
+    expect(mockStore.set.mock.calls[0][0])
+      .toStrictEqual([expectedToBeInMockStore]);
+  });
+
+  it('should throw an AppError if the ID is not found', () => {
+    const params = 3;
+    const mockStore = createMockStore([{
+      id: 1,
+      done: true,
+      title: 'New Todo'
+    }]);
+
+    expect(() => remove(mockStore, params))
       .toThrow('Todo does not exist with the provided ID!');
   });
   
