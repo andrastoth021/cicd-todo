@@ -12,12 +12,12 @@ export function validateAddParams(params) {
 }
 
 export function validateCompleteParams(params) {
-  if(params.length !== 1) {
+  if (params.length !== 1)
     throw new AppError('Give an ID as the only parameter in parenthesis.');
-  }
+  
   const [id] = params;
-  if(typeof id !== 'number' && id < 0) {
-    throw new AppError('The ID must be a number which is bigger than zero.')
-  }
+  if (typeof id !== 'number' || isNaN(id) || id < 0)
+    throw new AppError('The ID must be a number which is bigger than zero.');
+  
   return params;
 }
