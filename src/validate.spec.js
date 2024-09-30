@@ -1,4 +1,4 @@
-import { validateAddParams } from "./validate";
+import { validateAddParams, validateCompleteParams } from './validate.js';
 
 describe('validateAddParams', () => {
   it('should pass and return with the original params with single string', () => {
@@ -49,3 +49,36 @@ describe('validateAddParams', () => {
 
 
 })
+
+describe('validateCompleteParams', () => {
+  it('should throw when multiple params given', () => {
+    const params = ['1', '15'];
+    
+    expect(() => validateCompleteParams(params))
+      .toThrow('Give an ID as the only parameter in parenthesis.');
+  })
+
+  it('should throw when no params given.', () => {
+    const params = [];
+    
+    expect(() => validateCompleteParams(params))
+      .toThrow('Give an ID as the only parameter in parenthesis.');
+  })
+
+  it('should throw when the param is not a bigger than zero', () => {
+    const params = [-1];
+    
+    expect(() => validateCompleteParams(params))
+      .toThrow('The ID must be a number which is bigger than zero.');
+  })
+  
+  
+  it('should throw if the provided ID is not numeric', () => {
+    const params = ["String"];
+    
+    expect(() => validateCompleteParams(params))
+      .toThrow('The ID must be a number which is bigger than zero.');
+  })
+
+})
+
