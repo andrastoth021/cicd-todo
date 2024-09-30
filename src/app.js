@@ -1,7 +1,7 @@
 import { list, formatList, format, add, findById, rename, complete } from "./todo.js";
 import { display } from "./display.js";
 import { AppError } from "./app-error.js";
-import { validateAddParams,validateRenameParams, validateFindByidParams, validateCompleteParams } from "./validate.js";
+import { validateAddParams,validateRenameParams, validateFindByidParams, validateCompleteParams, validateFindByStatusParams } from "./validate.js";
 
 
 export function createApp(todoStore, args) {
@@ -33,6 +33,11 @@ export function createApp(todoStore, args) {
       const completed = complete(todoStore, validatedId);
       display(['Todo with the following ID is completed: ' + validatedId]);
       display([format(completed)]);
+      break;
+    case "find-by-status":
+      const status = validateFindByStatusParams(params);
+      const filteredTodos = findByStatus(todoStore, status);
+      display(formatList(filteredTodos));
       break;
     default:
       throw new AppError(`Unknown command: ${command}`);

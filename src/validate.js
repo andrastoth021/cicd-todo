@@ -60,3 +60,15 @@ export function validateFindByidParams(params) {
 
 }
 
+export function validateFindByStatusParams(params) {
+  const [status] = params;
+
+  switch (status) {
+    case "done":
+      return status;
+    case "not-done":
+      return status;
+    default:
+      throw new AppError("Invalid status! Please provide 'done' or 'not-done'.");
+  }
+}
