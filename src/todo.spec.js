@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-import { add, format, formatList, list } from './todo.js';
+import { add, complete, format, formatList, list } from './todo.js';
 
 function createMockStore(data) {
   return {
@@ -136,5 +136,50 @@ describe('add', () => {
 });
 
 
+describe('complete', () => {
+  it('should change the preferred todo to completed', () => {
+    const params = 1;
+    const mockStore = createMockStore([{
+      id: 1,
+      done: false,
+      title: 'New Todo'
+    }]);
+    
+    const expected = {
+      id: 1,
+      done: true,
+      title: 'New Todo'
+    }
+    
+    const current = complete(mockStore, params);
 
+    expect(current).toStrictEqual(expected);
+    expect(mockStore.set.mock.calls[0][0])
+      .toStrictEqual([expected]);
+  });
+
+  it('should throw if the selected todo is already completed', () => {
+    const params = 1;
+    const mockStore = createMockStore([{
+      id: 1,
+      done: true,
+      title: 'New Todo'
+    }]);
+
+    expect(() => complete(mockStore, params))
+      .toThrow('This Todo is already completed!');
+  })
+
+  it('should throw an AppError if the ID is not found', () => {
+    const params = 3;
+    const mockStore = createMockStore([{
+      id: 1,
+      done: true,
+      title: 'New Todo'
+    }]);
+
+    expect(() => complete(mockStore, params))
+      .toThrow('Todo does not exist with the provided ID!');
+  })
+});
 
