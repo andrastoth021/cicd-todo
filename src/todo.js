@@ -124,8 +124,10 @@ export function findByTitle(store, params) {
 }
 
 // function to refactor todo.js
-function changeTodoWithId(store,id,callbackFn=()=>{}){
+function changeTodoWithId(store,idString,callbackFn=()=>{}){
   const todos = store.get();
+  const id = +idString;
+  
   let searchedTodo = null;
   let indexOfTodo;
 
@@ -137,6 +139,6 @@ function changeTodoWithId(store,id,callbackFn=()=>{}){
       indexOfTodo = i;
     }
   }
-  console.log("searchedTodo,indexOfTodo:", searchedTodo,indexOfTodo)
+  
   return {searchedTodo,indexOfTodo};
 }
