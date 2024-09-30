@@ -16,7 +16,8 @@ export function validateCompleteParams(params) {
   if (params.length !== 1)
     throw new AppError('Give an ID as the only parameter in parenthesis.');
   
-  const [id] = params;
+  const [idParam] = params;
+  const id = parseInt(idParam);
   if (typeof id !== 'number' || isNaN(id) || id < 0)
     throw new AppError('The ID must be a number which is bigger than zero.');
   
