@@ -69,6 +69,7 @@ export function validateFindByidParams(params) {
   if (id <= 0) {
     throw new AppError("The id should be bigger than 0!");
   }
+
   return params;
 }
 
