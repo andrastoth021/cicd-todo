@@ -37,19 +37,18 @@ export function add(store, params) {
 
 export function complete(store, params) {
   const id = parseInt(params);
-
+  const {searchedTodo,indexOfTodo} = changeTodoWithId(store,id);
+  
   const todos = store.get();
-  for (let i = 0; i < todos.length; i++) {
-    const todo = todos[i];
-    if (todo.id == id) {
-      if (todo.done === true) throw new AppError("This Todo is already completed!");
-      else {
-        todo.done = true;
-        const toStore = [...todos];
-        store.set(toStore);
-        return todo;
+  
+  if(searchedTodo){
+    if (searchedTodo.done === true) throw new AppError("This Todo is already completed!");
+    else {
+      searchedTodo.done = true;
+      todos.splice(indexOfTodo, 1, searchedTodo);
+      store.set(todos);
+      return searchedTodo;
       }
-    }
   }
 
   throw new AppError('Todo does not exist with the provided ID!');
@@ -58,53 +57,37 @@ export function complete(store, params) {
 export function remove(store, params) {
   const id = parseInt(params);
   const todos = store.get();
+  const {searchedTodo,indexOfTodo} = changeTodoWithId(store,id)
 
-  for (let i = 0; i < todos.length; i++) {
-    const todo = todos[i];
-    if (todo.id === id) {
-      todos.splice(i, 1);
+  if(searchedTodo){
+      todos.splice(indexOfTodo, 1);
       const toStore = [...todos];
       store.set(toStore)
-      return todo;
-    }
+      return searchedTodo;
   }
 
   throw new AppError('Todo does not exist with the provided ID!');
 }
 
 export function findById(store, idParam) {
-
-  const id = Number(idParam);
-
-  const todos = store.get();
-
-  for(const todo of todos){
-    if(todo.id === id){
-      return todo;
-    }
-  }
-
-  throw new AppError(`There is no todo with id: ${id}`);
+  const id = idParam; 
+  const {searchedTodo} = changeTodoWithId(store,id)
   
+  if(searchedTodo){return searchedTodo};
+  throw new AppError(`There is no todo with id: ${id}`);  
 }
 
 export function rename(todoStore,params) {
   const [id,title] = params;
-  let foundIndex = null;
-  const [foundTODO] = list(todoStore).filter((item,index)=>{
-        if(item.id==id){
-          foundIndex = index;
-          return true;
-        } 
-      });
+  const {searchedTodo,indexOfTodo} = changeTodoWithId(todoStore,id)
   
-  if(foundTODO){    
-    foundTODO.title = title;
+  if(searchedTodo){    
+    searchedTodo.title = title;
     const todos = todoStore.get()
-    todos.splice(foundIndex,1,foundTODO);
+    todos.splice(indexOfTodo,1,searchedTodo);
     todoStore.set(todos)
   }
-  return foundTODO;
+  return searchedTodo;
 }
 
 export function findByStatus(store, status) {
@@ -127,4 +110,23 @@ export function findByTitle(store, params) {
         regexp.test(item.title)
       );
   return foundToDos;
+}
+
+// function to refactor todo.js
+function changeTodoWithId(store,idString){
+  const todos = store.get();
+  const id = Number(idString);
+  
+  let searchedTodo = null;
+  let indexOfTodo = null;
+
+  for (let i = 0; i < todos.length; i++) {
+    const todo = todos[i];
+    if (todo.id === id) {
+      searchedTodo = todo;
+      indexOfTodo = i;
+    }
+  }
+  
+  return {searchedTodo,indexOfTodo};
 }
