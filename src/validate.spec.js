@@ -213,7 +213,7 @@ describe('validateFindByStatusParams', () => {
 
 describe('validateTitleSearchParams', () => {
 
-  it('should throw when the param length is a less than 3 charakter long string', () => {
+  it('should throw when the param length is a less than 3 character long string', () => {
     const params = ['as'];
     
     expect(() => validateTitleSearchParams(params))

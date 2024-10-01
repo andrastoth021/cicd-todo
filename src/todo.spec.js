@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 import { add, complete, format, formatList, list, findById, rename, findByStatus, remove, findByTitle } from './todo.js';
-
+import { display } from './display.js';
 
 function createMockStore(data) {
   return {
@@ -327,4 +327,49 @@ describe('findByTitle', () => {
     expect(current).toStrictEqual(expected);
   });
   
+  it('should find the titles even if the text is in different case', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo abc', done: false },
+      { id: 2, title: 'Todo dEf', done: true }
+    ])
+    
+    const expected = [
+      { id: 2, title: 'Todo dEf', done: true }
+      ];
+    const current = findByTitle(mockStore, ['DeF']);
+    expect(current).toStrictEqual(expected);
+  });
+  
+  it('should find more todos with the searched text in title', () => {
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo abc', done: false },
+      { id: 2, title: 'Todo def', done: true },
+      { id: 2, title: 'task ghi', done: true },
+    ])
+    
+    const expected = [
+      { id: 1, title: 'Todo abc', done: false },
+      { id: 2, title: 'Todo def', done: true },
+      ];
+    const current = findByTitle(mockStore, ['Todo']);
+    expect(current).toStrictEqual(expected);
+  });
+
+  it('should log a message to the console, if there are no todos with the text in title',()=>{
+    const mockStore = createMockStore([
+      { id: 1, title: 'Todo 1', done: false },
+      { id: 2, title: 'Todo 1', done: true }
+    ])
+    
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+    // Meghívjuk a függvényt, amit tesztelünk
+    findByTitle(mockStore, ['text']);
+
+    // Ellenőrizzük, hogy a console.log a megfelelő üzenetet kapta a display-en keresztül
+    expect(consoleSpy).toHaveBeenCalledWith('There are no todos with similar title.');
+
+    // Visszaállítjuk a console.log eredeti működését
+    consoleSpy.mockRestore();
+  })
 });

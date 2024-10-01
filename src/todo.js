@@ -1,5 +1,5 @@
 import { AppError } from './app-error.js';
-
+import { display } from './display.js';
 
 export function format(todo) {
   return `${todo.id} - [${todo.done ? 'x': ' '}] ${todo.title}`;
@@ -126,5 +126,7 @@ export function findByTitle(store, params) {
   const foundToDos = list(store).filter(item=>
         regexp.test(item.title)
       );
-  return foundToDos;
+      if(foundToDos.length){display([...formatList(foundToDos)]);}
+      else {display([`There are no todos with similar title.`])}
+      return foundToDos;
 }
