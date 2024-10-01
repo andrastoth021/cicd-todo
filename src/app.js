@@ -19,6 +19,7 @@ export function createApp(todoStore, args) {
       break;
     case "find-by-id":
       const validatedParam = validateFindByidParams(params);
+      console.log('params: ',params,"validatedParam ",validatedParam)
       const todo = findById(todoStore, validatedParam);
       display([format(todo)]);
       break;

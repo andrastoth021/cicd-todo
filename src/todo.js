@@ -73,17 +73,11 @@ export function remove(store, params) {
 }
 
 export function findById(store, idParam) {
+  console.log(idParam);
+  const id = idParam; 
+  const {searchedTodo} = changeTodoWithId(store,id)
 
-  const id = Number(idParam);
-
-  const todos = store.get();
-
-  for(const todo of todos){
-    if(todo.id === id){
-      return todo;
-    }
-  }
-
+  if(searchedTodo){return searchedTodo};
   throw new AppError(`There is no todo with id: ${id}`);
   
 }
@@ -124,9 +118,9 @@ export function findByTitle(store, params) {
 }
 
 // function to refactor todo.js
-function changeTodoWithId(store,idString,callbackFn=()=>{}){
+function changeTodoWithId(store,idString,callbackFn=(store,todo,index)=>{store,todo,index}){
   const todos = store.get();
-  const id = +idString;
+  const id = Number(idString);
   
   let searchedTodo = null;
   let indexOfTodo;
@@ -134,7 +128,7 @@ function changeTodoWithId(store,idString,callbackFn=()=>{}){
   for (let i = 0; i < todos.length; i++) {
     const todo = todos[i];
     if (todo.id === id) {
-      callbackFn()
+      callbackFn(todos,todo,i);
       searchedTodo = todo;
       indexOfTodo = i;
     }
