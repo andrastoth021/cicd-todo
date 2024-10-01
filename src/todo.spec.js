@@ -180,7 +180,7 @@ describe('complete', () => {
     }]);
 
     expect(() => complete(mockStore, params))
-      .toThrow('Todo does not exist with the provided ID!');
+      .toThrow(`There is no todo with id: ${params}`);
   });
   
 });
@@ -226,7 +226,7 @@ describe('delete', () => {
     }]);
 
     expect(() => remove(mockStore, params))
-      .toThrow('Todo does not exist with the provided ID!');
+      .toThrow(`There is no todo with id: ${params}`);
   });
   
 });
